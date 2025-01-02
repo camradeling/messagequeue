@@ -61,7 +61,9 @@ int MessageQueue<T>::push(T item, bool forceStart)
         stopped = false;
         itemsQ.push(std::move(item));
         uint64_t val = 1;
-        write(evFd, &val, sizeof(val));
+        ssize_t res = write(evFd, &val, sizeof(val));
+        if (res < 0)
+            return -1;
     }
     return 0;
 }
